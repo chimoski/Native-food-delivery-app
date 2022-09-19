@@ -20,9 +20,11 @@ import {
 import Categories from "../components/Categories";
 import FeaturedRow from "../components/FeaturedRow";
 import client from "../sanityClient";
+import { useIsFocused } from "@react-navigation/native";
 
 const Home = () => {
 	const [featuredCategories, setFeaturedCategories] = useState([]);
+	const isFocussed = useIsFocused();
 
 	useEffect(() => {
 		client
@@ -43,23 +45,24 @@ const Home = () => {
 
 	useEffect(() => {
 		const backAction = () => {
-			Alert.alert("Hold on!", "Are you sure you want to go back?", [
-				{
-					text: "Cancel",
-					onPress: () => null,
-					style: "cancel",
-				},
-				{ text: "YES", onPress: () => BackHandler.exitApp() },
-			]);
+			if (isFocussed) {
+				Alert.alert("Hold on!", "Are you sure you want to Exit app?", [
+					{
+						text: "Cancel",
+						onPress: () => null,
+						style: "cancel",
+					},
+					{ text: "YES", onPress: () => BackHandler.exitApp() },
+				]);
+			}
 			return true;
 		};
 
-		const backHandler = BackHandler.addEventListener(
+		const handleBack = BackHandler.addEventListener(
 			"hardwareBackPress",
 			backAction
 		);
-
-		return () => backHandler.remove();
+		return () => handleBack.remove();
 	}, []);
 
 	return (

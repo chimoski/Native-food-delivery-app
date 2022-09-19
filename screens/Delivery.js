@@ -35,7 +35,6 @@ const Delivery = () => {
 				dispatch(resetCart());
 			}
 		);
-
 		return () => backHandler.remove();
 	}, []);
 
